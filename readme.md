@@ -15,7 +15,9 @@ We are not keep environment super clear (except local variables ;))
 so there are some variables can be used in game:
 
 `W` and `H` variables: width and height of the screen, controlled by love.resize function.
+
 `love.resize` and optional `resize` payload: functions called when screen size when changed and at boot.
+
 `love.handlers.quit`: function on exit which can be called until game was selected to keep responsive or for custom love.run function.
 
 # Fill game information
