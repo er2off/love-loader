@@ -18,7 +18,15 @@ so there are some variables can be used in game:
 
 `love.resize` and optional `resize` payload: functions called when screen size when changed and at boot.
 
-`love.handlers.quit`: function on exit which can be called until game was selected to keep responsive or for custom love.run function.
+`love.event.quit`: function to quit to menu screen
+
+`COLDIV`: color divider (1 or 255) to setColor function
+
+`llUsed`: is Love Loader used
+
+`llHome`: function to quit to menu screen
+
+They also can be used without Love Loader if load `ll-min.lua`
 
 # Fill game information
 
@@ -31,4 +39,6 @@ Syntax is `k = v` with `# comments`
 name = New awesome game using Love Loader
 desc = Some descripion about the game.
 # main = optional main file instead of `main.lua`
+pic = screen.png
+pics = [ screen.png; screen2.png ] # wow array
 ```
