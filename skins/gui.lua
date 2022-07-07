@@ -1,7 +1,5 @@
 return function(ll)
 
--- Classic UI from Love Loader v1
-
 ll.cfg.pcht = ll.cfg.pcht or 60 * 5
 
 local pikchv, pikcha = 0, 0
@@ -10,8 +8,8 @@ local pikchao = math.floor(1 / ll.cfg.pcht * 2 * 255 + 0.5)
 local cx, cy, cw, ch
 local f, bf
 
-local mx, mb, mpb = 0, 0, 0
-local cdir, sel = 0, 1
+local sel = 1
+local cdir
 
 function resize()
   cw = W / 1.25
@@ -23,40 +21,25 @@ function resize()
 
   f  = love.graphics.newFont(th / 3)
   bf = love.graphics.newFont(th / 2)
+
+  ll.kbInit('h', cx, cx + cw)
 end
 
 local function update()
-  mx = love.mouse.getX()
-  mpb = mb
-  if love.mouse.isDown(1) then mb = 1
-  else mb = 0 end
-
-  local sdi = 0
-  if mpb == 1 and mb == 0 then
-    if mx <= cx
-    then sdi = 1
-    elseif mx >= cx + cw
-    then sdi = 2
-    else sdi = 3
-    end
-  end
-
-  if love.keyboard.isScancodeDown('left', 'a')
-  then sdi = 1
-  elseif love.keyboard.isScancodeDown('right', 'd')
-  then sdi = 2
-  elseif love.keyboard.isScancodeDown('return', 'space')
-  then sdi = 3
-  end
+  local sdi = ll.kbGet()
 
   if cdir ~= sdi then
     cdir = sdi
-    if sdi == 1
+    if sdi == '<'
     then sel = sel - 1
-    elseif sdi == 2
+    elseif sdi == '>'
     then sel = sel + 1
-    elseif sdi == 3 and ll.games[sel]
+    elseif sdi == 'o' and ll.games[sel]
     then ll.mount(ll.games[sel])
+
+    elseif sdi == 'm'
+    and love.mouse.getX() >= W - 8
+    then ll.devtools()
     end
 
     if sel < 1 then sel = #ll.games end
@@ -77,11 +60,6 @@ local function update()
       end
     end
   else pikcha = math.min(255, pikcha + pikchao)
-  end
-
-  if love.keyboard.isDown 'menu'
-  and mx >= W - 8
-  then pcall(select(2, pcall(require, 'dev.devtools')), ll)
   end
 end
 

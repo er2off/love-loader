@@ -15,6 +15,9 @@ ll.cfg.pcht = ll.cfg.pcht or 60 * 5
 local pikchv, pikcha = 0, 0
 local pikchao = math.floor(1 / ll.cfg.pcht * 2 * 255 + 0.5)
 
+local logger = ''
+local chc = '<>><m><'
+
 function resize()
   r = math.min(W, H) / 30
 
@@ -26,57 +29,38 @@ function resize()
 
   f = love.graphics.setNewFont(math.min(W, H) / 30)
   bf = love.graphics.newFont(math.min(W, H) / 20)
+
+  ll.kbInit('v', H / 2 - ch, H / 2 + ch + cg, cx + cw * 2)
 end
 
 love.window.setMode(800, 600, {resizable = true})
 
-local my, mb, mpb
-
-local sdir = 0
+local sdir
 local function update()
   local ty = H / 2 - (ch + cg) * sel
   cy   = cy  + (ty - cy) * 0.1
   css  = css + (2 - css) * 0.2
   rcss = 2 - css + 1
 
-  local sdi
-
-  my = love.mouse.getY()
-  mpb = mb
-  if love.mouse.isDown(1) then mb = 1
-  else mb = 0
-  end
-  if mb == 0 and mpb == 1 then
-    if my <= H / 2 - ch
-    then sdi = 1
-    elseif my >= H / 2 + ch + cg
-    then sdi = 2
-    else sdi = 3
-    end
-  elseif love.keyboard.isScancodeDown('up', 'w')
-  then sdi = 1
-  elseif love.keyboard.isScancodeDown('down', 's')
-  then sdi = 2
-  elseif love.keyboard.isScancodeDown('return', 'space')
-  then sdi = 3
-  else sdi = 0
-  end
+  local sdi = ll.kbGet()
 
   if sdi ~= sdir then
-    if sdi ~= 0
+    if sdi
     then rcss = css
       css = 1
-      if sdi == 3
-      then css = 1.5
-      end
       psel = sel
+      logger = logger .. sdi
+      if logger == chc then
+        resize()
+        ll.devtools()
+      end
     end
     sdir = sdi
-    if sdi == 1
+    if sdi == '<'
     then sel = sel - 1
-    elseif sdi == 2
+    elseif sdi == '>'
     then sel = sel + 1
-    elseif sdi == 3 and ll.games[sel]
+    elseif sdi == 'o' and ll.games[sel]
     then ll.mount(ll.games[sel])
     end
 

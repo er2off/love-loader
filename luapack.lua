@@ -9,6 +9,7 @@ return {
         'llHome',
         'resize',
         'COLDIV',
+        'MOBILE',
         'W', 'H',
       }
     },

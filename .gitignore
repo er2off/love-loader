@@ -1,3 +1,5 @@
 dev
 build/
 games/*
+!games/.gitkeep
+
