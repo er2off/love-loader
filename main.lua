@@ -67,5 +67,53 @@ if ll.mdir then
   end)
   end
 
+  local t = {
+    title = 'Untitled',
+    window = {
+      width = W, height = H,
+      fullscreen = love.window.getFullscreen(),
+      resizable = false,
+    },
+    audio = {
+      mixwithsystem = true,
+      mic = false,
+    },
+    modules = {},
+    console = false,
+    accelerometerjoystick = true,
+    gammacorrect = false,
+  }
+  if pcall(require, 'conf')
+  and love.conf
+  then pcall(love.conf, t)
+  end
+
+  if t.console and love._openConsole
+  then love._openConsole()
+  end
+
+  love._setGammaCorrect(t.gammacorrect)
+  if MOBILE then
+    love._setAccelerometerAsJoystick(t.accelerometerjoystick)
+    if love.isVersionCompatible '11.3' then
+      love._setAudioMixWithSystem(t.audio.mixwithsystem)
+      love._requestRecordingPermission(t.audio.mic)
+    end
+    love.filesystem._setAndroidSaveExternal(t.externalstorage)
+  end
+
+  if t.window then
+    love.window.setTitle(t.window.title or t.title)
+    local ww, wh, wi =
+      t.window.width, t.window.height,
+      t.window.icon
+    t.window.width, t.window.height, t.window.title, t.window.icon
+      = nil
+    assert(love.window.setMode(ww, wh, t.window), 'Error setting up window')
+    if wi
+    then love.window.setIcon(love.image.newImageData(wi))
+    end
+  end
   love.resize(love.graphics.getDimensions())
 end
+
